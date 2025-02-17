@@ -6,6 +6,7 @@ import 'package:task_trader/Resources/app_text.dart';
 import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/images.dart';
 import 'package:task_trader/Resources/screen_sizes.dart';
+import 'package:task_trader/Services/auth_service.dart';
 
 class AddNewRule extends StatefulWidget {
   const AddNewRule({super.key});
@@ -53,7 +54,9 @@ class _AddNewRuleState extends State<AddNewRule> {
                   height: 62,
                   radius: 28.0,
                   fontSize: 20,
-                  fontWeight: FontWeight.w400),
+                  fontWeight: FontWeight.w400, onTap: () {
+                AuthService().addNewRules(_newRule.text);
+              }),
             ),
           ],
         ),

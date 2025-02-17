@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:task_trader/Resources/app_theme.dart';
+import 'package:task_trader/Services/auth_service.dart';
 
 class CustomAppFormField extends StatefulWidget {
+  final bool enabled;
   final double? height;
   final double? width;
   final double? fontsize;
@@ -55,6 +57,7 @@ class CustomAppFormField extends StatefulWidget {
     this.hintStyle,
     this.errorText,
     this.cursorColor,
+    this.enabled = true,
   });
 
   @override
@@ -71,11 +74,12 @@ class _CustomAppFormFieldState extends State<CustomAppFormField> {
           border: Border.all(color: const Color(0xFFF4F4F6)),
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(20)),
-      child: TextField(
+      child: TextFormField(
         style: TextStyle(color: Colors.white),
         controller: widget.controller,
         cursorColor: AppTheme.appColor,
         keyboardType: TextInputType.name,
+        enabled: widget.enabled,
         decoration: InputDecoration(
             prefixIcon: widget.prefixIcon,
             prefixIconConstraints: const BoxConstraints(
@@ -95,6 +99,7 @@ class _CustomAppFormFieldState extends State<CustomAppFormField> {
 }
 
 class CustomAppPasswordfield extends StatefulWidget {
+  final bool enabled;
   final double? height;
   final double? width;
   final bool containerBorderCondition;
@@ -140,6 +145,7 @@ class CustomAppPasswordfield extends StatefulWidget {
     this.suffixIconColor,
     this.errorText,
     this.cursorColor,
+    this.enabled = true,
   });
 
   @override
@@ -171,6 +177,7 @@ class _CustomAppPasswordfieldState extends State<CustomAppPasswordfield> {
           cursorColor: AppTheme.appColor,
           obscureText: _obscureText,
           keyboardType: TextInputType.name,
+          enabled: widget.enabled,
           decoration: InputDecoration(
               prefixIcon: widget.prefixIcon,
               prefixIconConstraints: const BoxConstraints(
@@ -201,5 +208,31 @@ class _CustomAppPasswordfieldState extends State<CustomAppPasswordfield> {
                 ),
               )),
         ));
+  }
+}
+
+class FormValidator {
+  static String? validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Name cannot be empty";
+    }
+    return null;
+  }
+
+  static String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Email cannot be empty";
+    }
+    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+      return "Enter a valid email";
+    }
+    return null;
+  }
+
+  static String? validatePassword(String? value) {
+    if (value == null || value.length < 8) {
+      return "Password must be at least 8 characters";
+    }
+    return null;
   }
 }

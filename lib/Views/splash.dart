@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/images.dart';
+import 'package:task_trader/Views/bottom_navigation_bar.dart';
 import 'package:task_trader/Views/onboarding.dart';
 
 class Splash extends StatefulWidget {
@@ -17,8 +19,17 @@ class _SplashState extends State<Splash> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => OnboardingScreen()));
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const BottomNavView()));
+      } else {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    const OnboardingScreen())); // Redirect to signup/login screen if not logged in
+      }
     });
   }
 

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:task_trader/Resources/app_bar_home.dart';
 import 'package:task_trader/Resources/app_button.dart';
@@ -7,6 +8,7 @@ import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/images.dart';
 import 'package:task_trader/Resources/screen_sizes.dart';
 import 'package:task_trader/Resources/utils.dart';
+import 'package:task_trader/Services/auth_service.dart';
 import 'package:task_trader/Views/ai_screen.dart';
 import 'package:task_trader/Views/progress_bar.dart';
 import 'package:task_trader/Views/reward_screen.dart';
@@ -103,108 +105,107 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class TradingRules extends StatefulWidget {
-  const TradingRules({super.key});
+// class TradingRules extends StatefulWidget {
+//   const TradingRules({super.key});
 
-  @override
-  State<TradingRules> createState() => _TradingRulesState();
-}
+//   @override
+//   State<TradingRules> createState() => _TradingRulesState();
+// }
 
-class _TradingRulesState extends State<TradingRules> {
-  final List<String> rules = [
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac erat ut purus tristique feugiat nec accumsan ipsum.",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ac erat ut purus tristique feugiat nec accumsan ipsum. Nunc rhoncus, quam sed maximus pellentesque, diam orci consequat nisl, nec facilisis ante purus rhoncus ligula.",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  ];
+// class _TradingRulesState extends State<TradingRules> {
+//   List<String> rules = []; // Store fetched rules
+//   final Set<int> selectedIndices = {}; // Store selected rules
 
-  // Use a set to store selected indices
-  final Set<int> selectedIndices = {};
+//   @override
+//   void initState() {
+//     super.initState();
+//     fetchRulesData(); // Fetch rules when widget initializes
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        AppText.appText("Current Running Trading Rules",
-            textColor: AppTheme.whiteColor, fontSize: 20),
-        SizedBox(
-          height: 20,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: const Color(0xFF211E41),
-          ),
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: rules.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: index % 2 == 0
-                            ? const Color(0xFFECECEC)
-                            : const Color(0xFFFCDDEC),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 10),
-                        title: AppText.appText(
-                          rules[index],
-                        ),
-                        trailing: Radio<bool>(
-                          value: true,
-                          groupValue: selectedIndices.contains(index),
-                          onChanged: (bool? value) {
-                            setState(() {
-                              if (value == true) {
-                                selectedIndices.add(index);
-                              } else {
-                                selectedIndices.remove(index);
-                              }
-                            });
-                          },
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              AppButton.appButton("Next", onTap: () {
-                if (selectedIndices.isNotEmpty) {
-                  print(
-                      "Selected Rules: ${selectedIndices.map((i) => rules[i]).toList()}");
-                  showDialog(
-                    context: context,
-                    builder: (context) => CustomDialog(),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text("Please select at least one rule.")),
-                  );
-                }
-              }),
-            ],
-          ),
-        ),
-        const SizedBox(
-          height: 70,
-        )
-      ],
-    );
-  }
-}
+//   Future<void> fetchRulesData() async {
+//     List<String> fetchedRules = await AuthService().fetchRules();
+//     setState(() {
+//       rules = fetchedRules;
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         AppText.appText("Current Running Trading Rules",
+//             textColor: AppTheme.whiteColor, fontSize: 20),
+//         const SizedBox(height: 20),
+//         if (rules.isNotEmpty) // Only show rules if available
+//           Container(
+//             decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(20),
+//               color: const Color(0xFF211E41),
+//             ),
+//             padding: const EdgeInsets.all(20),
+//             child: Column(
+//               children: [
+//                 ListView.builder(
+//                   physics: const NeverScrollableScrollPhysics(),
+//                   shrinkWrap: true,
+//                   itemCount: rules.length,
+//                   itemBuilder: (context, index) {
+//                     return Padding(
+//                       padding: const EdgeInsets.symmetric(
+//                           vertical: 10, horizontal: 8),
+//                       child: Container(
+//                         decoration: BoxDecoration(
+//                           color: index % 2 == 0
+//                               ? const Color(0xFFECECEC)
+//                               : const Color(0xFFFCDDEC),
+//                           borderRadius: BorderRadius.circular(20),
+//                         ),
+//                         child: ListTile(
+//                           contentPadding: const EdgeInsets.symmetric(
+//                               horizontal: 15, vertical: 10),
+//                           title: AppText.appText(rules[index]),
+//                           trailing: Radio<bool>(
+//                             value: true,
+//                             groupValue: selectedIndices.contains(index),
+//                             onChanged: (bool? value) {
+//                               setState(() {
+//                                 if (value == true) {
+//                                   selectedIndices.add(index);
+//                                 } else {
+//                                   selectedIndices.remove(index);
+//                                 }
+//                               });
+//                             },
+//                           ),
+//                         ),
+//                       ),
+//                     );
+//                   },
+//                 ),
+//                 const SizedBox(height: 30),
+//                 AppButton.appButton("Next", onTap: () {
+//                   if (selectedIndices.isNotEmpty) {
+//                     print(
+//                         "Selected Rules: ${selectedIndices.map((i) => rules[i]).toList()}");
+//                     showDialog(
+//                       context: context,
+//                       builder: (context) => CustomDialog(),
+//                     );
+//                   } else {
+//                     ScaffoldMessenger.of(context).showSnackBar(
+//                       const SnackBar(
+//                           content: Text("Please select at least one rule.")),
+//                     );
+//                   }
+//                 }),
+//               ],
+//             ),
+//           ),
+//         const SizedBox(height: 70),
+//       ],
+//     );
+//   }
+// }
 
 //Alert Dialogue Widget used in HomePage
 class CustomDialog extends StatefulWidget {

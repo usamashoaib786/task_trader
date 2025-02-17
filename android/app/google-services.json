@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "963987269530",
+    "project_id": "task-trader-aed54",
+    "storage_bucket": "task-trader-aed54.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:963987269530:android:defd217f8507ecbcc5bc23",
+        "android_client_info": {
+          "package_name": "com.example.task_trader"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCul7enRi314d4VtNPRD6Khnhjl5lBiK7s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
