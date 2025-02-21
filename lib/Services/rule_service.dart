@@ -18,13 +18,11 @@ class RulesService {
         await FirebaseFirestore.instance.collection("users").doc(uid).get();
 
     if (docSnapshot.exists) {
-      // Get the "Rules" field as a List
       List<dynamic>? rulesList = docSnapshot.get("Rules");
-
       if (rulesList != null) {
         return List<String>.from(rulesList);
       }
     }
-    return []; // Return empty list if no rules found
+    return [];
   }
 }

@@ -6,7 +6,6 @@ import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/screen_sizes.dart';
 import 'package:task_trader/Resources/utils.dart';
 import 'package:task_trader/Services/auth_service.dart';
-import 'package:task_trader/Views/bottom_navigation_bar.dart';
 import 'package:task_trader/Views/signup.dart';
 
 class Login extends StatefulWidget {
@@ -82,29 +81,34 @@ class _LoginState extends State<Login> {
                       padding: const EdgeInsets.only(bottom: 40.0),
                       child: Column(
                         children: [
-                          AppButton.appButton(
-                  onTap: () async {
-                    if (_email.text.isEmpty ||
-                        _password.text.isEmpty) {
-                      AuthService().showToast("Please fill all fields");
-                    } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
-                        .hasMatch(_email.text)) {
-                      AuthService().showToast("Enter a valid email");
-                    } else if (_password.text.length < 8) {
-                      AuthService()
-                          .showToast("Invalid password: minimum 8 characters required.");
-                    } else {
-                      try {
-                             await AuthService().signin(
-                                  email: _email.text.trim(),
-                                  password: _password.text.trim(),
-                                   context: context);
-                        } catch (e) {
-                        AuthService().showToast("Error: $e");
-                      }
-                    }
-                  
-                          
+                          AppButton.appButton(onTap: () async {
+                            showDialog(
+                              context: context,
+                              barrierDismissible:
+                                  false, // Prevent closing by tapping outside
+                              builder: (context) =>
+                                  Center(child: CircularProgressIndicator()),
+                            );
+
+                            if (_email.text.isEmpty || _password.text.isEmpty) {
+                              AuthService().showToast("Please fill all fields");
+                            } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                                .hasMatch(_email.text)) {
+                              AuthService().showToast("Enter a valid email");
+                            } else if (_password.text.length < 8) {
+                              AuthService().showToast(
+                                  "Invalid password: minimum 8 characters required.");
+                            } else {
+                              try {
+                                await AuthService().signin(
+                                    email: _email.text.trim(),
+                                    password: _password.text.trim(),
+                                    context: context);
+                              } catch (e) {
+                                Navigator.of(context).pop();
+                                AuthService().showToast("Error: $e");
+                              }
+                            }
                           }, "Login",
                               radius: 28.0,
                               fontSize: 18,

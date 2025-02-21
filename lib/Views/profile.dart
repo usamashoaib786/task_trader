@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:task_trader/Resources/app_bar.dart';
 import 'package:task_trader/Resources/app_button.dart';
@@ -6,8 +6,8 @@ import 'package:task_trader/Resources/app_field.dart';
 import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/images.dart';
 import 'package:task_trader/Resources/screen_sizes.dart';
-import 'package:task_trader/Resources/utils.dart';
 import 'package:task_trader/Services/auth_service.dart';
+import 'package:task_trader/Services/profile_service.dart';
 import 'package:task_trader/Views/login.dart';
 
 class Profile extends StatefulWidget {
@@ -18,25 +18,36 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  User? user;
-
+  List<Map<String, dynamic>> profiles = [];
   bool _isEditing = false;
-
-  @override
-  void initState() {
-    super.initState();
-    user = _auth.currentUser;
-
-    fullName.text = user?.displayName ?? "";
-    emailAddress.text = user?.email ?? "";
-    phoneNumber.text = user?.phoneNumber ?? "";
-  }
 
   TextEditingController fullName = TextEditingController();
   TextEditingController emailAddress = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchProfiles();
+  }
+
+  void _fetchProfiles() async {
+    Map<String, dynamic>? userProfile =
+        await ProfileService().fetchUserProfile();
+
+    if (userProfile != null && mounted) {
+      setState(() {
+        fullName.text = userProfile["name"] ?? "";
+        phoneNumber.text = userProfile["number"] ?? "";
+        emailAddress.text = userProfile["email"] ?? "";
+      });
+    } else {
+      if (kDebugMode) {
+        print("Profile not found!");
+      }
+    }
+  }
 
   void _toggleEdit() {
     setState(() {
@@ -129,13 +140,21 @@ class _ProfileState extends State<Profile> {
                   fontWeight: FontWeight.w400,
                   onTap: () async {
                     try {
+                      showDialog(
+                        context: context,
+                        barrierDismissible:
+                            false, // Prevent closing by tapping outside
+                        builder: (context) =>
+                            Center(child: CircularProgressIndicator()),
+                      );
+
                       await AuthService().updateUserInfo(
                         name: fullName.text,
                         //  email: emailAddress.text,
                         number: phoneNumber.text,
                         context: context,
                       );
-
+                      Navigator.of(context).pop();
                       setState(() {
                         _isEditing = false;
                       });
@@ -149,7 +168,16 @@ class _ProfileState extends State<Profile> {
               SizedBox(height: 40),
               GestureDetector(
                 onTap: () async {
+                  showDialog(
+                    context: context,
+                    barrierDismissible:
+                        false, // Prevent closing by tapping outside
+                    builder: (context) =>
+                        Center(child: CircularProgressIndicator()),
+                  );
+
                   await AuthService().signOutUser();
+                  Navigator.of(context).pop();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => Login()),

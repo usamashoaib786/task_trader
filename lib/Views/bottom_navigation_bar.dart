@@ -2,7 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Views/add_rule.dart';
-import 'package:task_trader/Views/homeScreen.dart';
+import 'package:task_trader/Views/home_screen.dart';
 import 'package:task_trader/Views/profile.dart';
 
 class BottomNavView extends StatefulWidget {

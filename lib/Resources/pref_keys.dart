@@ -1,6 +1,5 @@
 class PrefKey {
   static const String authorization = "token";
-  static const String fcm_token = "Fcm_token";
   static const String notification = "notification";
   static const String userName = "userName";
   static const String id = "id";
@@ -19,7 +18,7 @@ class PrefKey {
   static const String accountNumber = "account_number";
   static const String authorizationStatus = "authorization_status";
   static const String nottifyCount = "notifyCount";
-  static const String userType= "userType";
+  static const String userType = "userType";
   static const String email = "email";
   static const String password = "password";
   static const String phone = "phone";

@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:task_trader/Resources/app_bar_home.dart';
 import 'package:task_trader/Resources/app_button.dart';
@@ -8,7 +8,6 @@ import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/images.dart';
 import 'package:task_trader/Resources/screen_sizes.dart';
 import 'package:task_trader/Resources/utils.dart';
-import 'package:task_trader/Services/auth_service.dart';
 import 'package:task_trader/Views/ai_screen.dart';
 import 'package:task_trader/Views/progress_bar.dart';
 import 'package:task_trader/Views/reward_screen.dart';

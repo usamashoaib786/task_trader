@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:task_trader/Resources/utils.dart';
@@ -6,15 +7,18 @@ import 'package:task_trader/Views/bottom_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AuthService {
+  final ValueNotifier<bool> isLoading = ValueNotifier(false);
+
   Future<void> signup({
     required String name,
     required String email,
     required String password,
     required BuildContext context,
   }) async {
+    isLoading.value = true;
     try {
       FirebaseAuth auth = FirebaseAuth.instance;
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      // FirebaseFirestore firestore = FirebaseFirestore.instance;
 
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -36,7 +40,9 @@ class AuthService {
         'Rules': [] // Initialize rules as an empty array
       });
 
+      isLoading.value = false;
       Future.delayed(const Duration(seconds: 1), () {
+        // ignore: use_build_context_synchronously
         pushReplacement(context, BottomNavView());
       });
     } on FirebaseAuthException catch (e) {
@@ -45,6 +51,8 @@ class AuthService {
       } else {
         _handleAuthError(e, context);
       }
+    } catch (e) {
+      isLoading.value = false; // Ensure loading state is reset on unknown error
     }
   }
 
@@ -140,46 +148,11 @@ class AuthService {
   }
 
   void showToast(String message) {
-    print("Error Message details" + message);
+    if (kDebugMode) {
+      print("Error Message details$message");
+    }
     Fluttertoast.showToast(
       msg: message,
     );
-  }
-
-  // Future<void> saveUserProfile(String name, int number) async {
-  //   String uid = FirebaseAuth.instance.currentUser!.uid;
-
-  //   await FirebaseFirestore.instance.collection("users").doc(uid).set({
-  //     "profile": {
-  //       "name": name,
-  //       "number": number,
-  //     },
-  //   });
-  // }
-
-  Future<void> addNewRules(String rule) async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    DocumentReference docRef =
-        FirebaseFirestore.instance.collection("users").doc(uid);
-
-    await docRef.set({
-      "Rules": FieldValue.arrayUnion([rule])
-    }, SetOptions(merge: true));
-  }
-
-  Future<List<String>> fetchRules() async {
-    String uid = FirebaseAuth.instance.currentUser!.uid;
-    DocumentSnapshot docSnapshot =
-        await FirebaseFirestore.instance.collection("users").doc(uid).get();
-
-    if (docSnapshot.exists) {
-      // Get the "Rules" field as a List
-      List<dynamic>? rulesList = docSnapshot.get("Rules");
-
-      if (rulesList != null) {
-        return List<String>.from(rulesList);
-      }
-    }
-    return []; // Return empty list if no rules found
   }
 }

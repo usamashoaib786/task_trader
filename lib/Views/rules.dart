@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:task_trader/Resources/utils.dart';
-import 'package:task_trader/Services/auth_service.dart';
 import 'package:task_trader/Services/rule_service.dart';
-import 'package:task_trader/Views/bottom_navigation_bar.dart';
-import 'package:task_trader/Views/homeScreen.dart';
+import 'package:task_trader/Views/home_screen.dart';
 
 class Rules extends StatefulWidget {
   const Rules({super.key});

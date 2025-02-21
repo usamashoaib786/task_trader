@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:task_trader/Resources/app_theme.dart';
-import 'package:task_trader/Services/auth_service.dart';
 
 class CustomAppFormField extends StatefulWidget {
   final bool enabled;

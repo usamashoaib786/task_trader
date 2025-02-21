@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:task_trader/Resources/app_button.dart';
 import 'package:task_trader/Resources/app_field.dart';
@@ -6,7 +5,6 @@ import 'package:task_trader/Resources/app_text.dart';
 import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/utils.dart';
 import 'package:task_trader/Services/auth_service.dart';
-import 'package:task_trader/Views/bottom_navigation_bar.dart';
 import 'package:task_trader/Views/login.dart';
 
 class Signup extends StatefulWidget {
@@ -88,6 +86,14 @@ class _SignupState extends State<Signup> {
               children: [
                 AppButton.appButton(
                   onTap: () async {
+                    showDialog(
+                      context: context,
+                      barrierDismissible:
+                          false, // Prevent closing by tapping outside
+                      builder: (context) =>
+                          Center(child: CircularProgressIndicator()),
+                    );
+
                     if (_fullName.text.isEmpty ||
                         _email.text.isEmpty ||
                         _password.text.isEmpty) {
@@ -107,6 +113,7 @@ class _SignupState extends State<Signup> {
                           context: context,
                         );
                       } catch (e) {
+                        Navigator.of(context).pop();
                         AuthService().showToast("Error: $e");
                       }
                     }
@@ -155,7 +162,7 @@ class _SignupState extends State<Signup> {
                   height: 40,
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
