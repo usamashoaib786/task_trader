@@ -86,14 +86,6 @@ class _SignupState extends State<Signup> {
               children: [
                 AppButton.appButton(
                   onTap: () async {
-                    showDialog(
-                      context: context,
-                      barrierDismissible:
-                          false, // Prevent closing by tapping outside
-                      builder: (context) =>
-                          Center(child: CircularProgressIndicator()),
-                    );
-
                     if (_fullName.text.isEmpty ||
                         _email.text.isEmpty ||
                         _password.text.isEmpty) {
@@ -106,6 +98,13 @@ class _SignupState extends State<Signup> {
                           .showToast("Password must be at least 8 characters");
                     } else {
                       try {
+                        showDialog(
+                          context: context,
+                          barrierDismissible:
+                              false, // Prevent closing by tapping outside
+                          builder: (context) =>
+                              Center(child: CircularProgressIndicator()),
+                        );
                         await AuthService().signup(
                           name: _fullName.text.trim(),
                           email: _email.text.trim(),
@@ -113,6 +112,7 @@ class _SignupState extends State<Signup> {
                           context: context,
                         );
                       } catch (e) {
+                        if (!context.mounted) return;
                         Navigator.of(context).pop();
                         AuthService().showToast("Error: $e");
                       }

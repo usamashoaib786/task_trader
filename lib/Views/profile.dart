@@ -154,6 +154,7 @@ class _ProfileState extends State<Profile> {
                         number: phoneNumber.text,
                         context: context,
                       );
+                      if (!context.mounted) return;
                       Navigator.of(context).pop();
                       setState(() {
                         _isEditing = false;
@@ -161,6 +162,7 @@ class _ProfileState extends State<Profile> {
 
                       AuthService().showToast("Profile updated successfully!");
                     } catch (e) {
+                      Navigator.of(context).pop();
                       AuthService().showToast("Error: $e");
                     }
                   },
@@ -177,6 +179,7 @@ class _ProfileState extends State<Profile> {
                   );
 
                   await AuthService().signOutUser();
+                  if (!context.mounted) return;
                   Navigator.of(context).pop();
                   Navigator.pushReplacement(
                     context,

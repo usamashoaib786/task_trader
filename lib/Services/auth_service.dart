@@ -49,9 +49,12 @@ class AuthService {
       if (e.code == 'email-already-in-use') {
         showToast("An account already exists with this email, Try Login!");
       } else {
+        if (!context.mounted) return;
         _handleAuthError(e, context);
       }
     } catch (e) {
+      showToast("Un-Known Error Occured");
+      Navigator.of(context).pop();
       isLoading.value = false; // Ensure loading state is reset on unknown error
     }
   }
@@ -68,6 +71,7 @@ class AuthService {
       );
 
       Future.delayed(const Duration(seconds: 1), () {
+        if (!context.mounted) return;
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const BottomNavView()),
@@ -75,6 +79,8 @@ class AuthService {
         );
       });
     } on FirebaseAuthException catch (e) {
+      Navigator.of(context).pop();
+      if (!context.mounted) return;
       _handleAuthError(e, context);
     }
   }

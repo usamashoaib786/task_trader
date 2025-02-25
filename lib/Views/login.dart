@@ -82,14 +82,7 @@ class _LoginState extends State<Login> {
                       child: Column(
                         children: [
                           AppButton.appButton(onTap: () async {
-                            showDialog(
-                              context: context,
-                              barrierDismissible:
-                                  false, // Prevent closing by tapping outside
-                              builder: (context) =>
-                                  Center(child: CircularProgressIndicator()),
-                            );
-
+                            
                             if (_email.text.isEmpty || _password.text.isEmpty) {
                               AuthService().showToast("Please fill all fields");
                             } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
@@ -100,11 +93,20 @@ class _LoginState extends State<Login> {
                                   "Invalid password: minimum 8 characters required.");
                             } else {
                               try {
+                                showDialog(
+                              context: context,
+                              barrierDismissible:
+                                  false, // Prevent closing by tapping outside
+                              builder: (context) =>
+                                  Center(child: CircularProgressIndicator()),
+                            );
+                            
                                 await AuthService().signin(
                                     email: _email.text.trim(),
                                     password: _password.text.trim(),
                                     context: context);
                               } catch (e) {
+                                if (!context.mounted) return;
                                 Navigator.of(context).pop();
                                 AuthService().showToast("Error: $e");
                               }

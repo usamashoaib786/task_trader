@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               AppTheme.appColor
                             ]),
                             borderRadius: BorderRadius.circular(10)),
-                        child: Rules()),
+                        child:  Rules()),
                   ),
                 )
               ],

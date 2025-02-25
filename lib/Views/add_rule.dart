@@ -70,7 +70,7 @@ class _AddNewRuleState extends State<AddNewRule> {
                             await RulesService().addNewRules(value.text);
 
                             _newRule.clear();
-                            if (!mounted) return;
+                            if (!context.mounted) return;
                             Navigator.pop(context);
 
                             showDialog(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_trader/Resources/app_text.dart';
 import 'package:task_trader/Services/rule_service.dart';
 import 'package:task_trader/Views/home_screen.dart';
 
@@ -61,103 +62,112 @@ class _RulesState extends State<Rules> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: PageView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            controller: _pageController,
-            itemCount: rulesText.length,
-            onPageChanged: (index) {
-              setState(() {
-                _currentPage = index;
-              });
-            },
-            itemBuilder: (context, index) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      rulesText[index],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w400,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  CheckboxListTile(
-                    value:
-                        (index < _isChecked.length) ? _isChecked[index] : false,
-                    onChanged: (value) {
-                      if (index < _isChecked.length) {
-                        setState(() {
-                          _isChecked[index] = value ?? false;
-                        });
-                      }
-                    },
-                    title: const Text(
-                      "I agree to this rule",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    controlAffinity: ListTileControlAffinity.leading,
-                  )
-
-                  // CheckboxListTile(
-                  //   value: _isChecked[index],
-                  //   onChanged: (value) {
-                  //     setState(() {
-                  //       _isChecked[index] = value ?? false;
-                  //     });
-                  //   },
-                  //   title: const Text(
-                  //     "I agree to this rule",
-                  //     style: TextStyle(color: Colors.white),
-                  //   ),
-                  //   controlAffinity: ListTileControlAffinity.leading,
-                  // ),
-                ],
-              );
-            },
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return rulesText.length == 0
+        ? Center(
+            child: AppText.appText(
+            "No Rules Found Yet, Add some rules!",
+            textColor: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w400,
+          ))
+        : Column(
             children: [
-              if (_currentPage > 0)
-                ElevatedButton(
-                  onPressed: _goToPreviousPage,
-                  child: const Text("Previous"),
+              Expanded(
+                child: PageView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: _pageController,
+                  itemCount: rulesText.length,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _currentPage = index;
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            rulesText[index],
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        CheckboxListTile(
+                          value: (index < _isChecked.length)
+                              ? _isChecked[index]
+                              : false,
+                          onChanged: (value) {
+                            if (index < _isChecked.length) {
+                              setState(() {
+                                _isChecked[index] = value ?? false;
+                              });
+                            }
+                          },
+                          title: const Text(
+                            "I agree to this rule",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          controlAffinity: ListTileControlAffinity.leading,
+                        )
+
+                        // CheckboxListTile(
+                        //   value: _isChecked[index],
+                        //   onChanged: (value) {
+                        //     setState(() {
+                        //       _isChecked[index] = value ?? false;
+                        //     });
+                        //   },
+                        //   title: const Text(
+                        //     "I agree to this rule",
+                        //     style: TextStyle(color: Colors.white),
+                        //   ),
+                        //   controlAffinity: ListTileControlAffinity.leading,
+                        // ),
+                      ],
+                    );
+                  },
                 ),
-              ElevatedButton(
-                onPressed: (_isChecked.isNotEmpty &&
-                        _isChecked.length > _currentPage &&
-                        _isChecked[_currentPage])
-                    ? () {
-                        if (_currentPage == rulesText.length - 1) {
-                          // Final action when Done is clicked
-                          showDialog(
-                            context: context,
-                            builder: (context) => CustomDialog(),
-                          );
-                        } else {
-                          _goToNextPage();
-                        }
-                      }
-                    : null,
-                child: Text(
-                  _currentPage == rulesText.length - 1 ? "Done" : "Next",
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (_currentPage > 0)
+                      ElevatedButton(
+                        onPressed: _goToPreviousPage,
+                        child: const Text("Previous"),
+                      ),
+                    ElevatedButton(
+                      onPressed: (_isChecked.isNotEmpty &&
+                              _isChecked.length > _currentPage &&
+                              _isChecked[_currentPage])
+                          ? () {
+                              if (_currentPage == rulesText.length - 1) {
+                                // Final action when Done is clicked
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => CustomDialog(),
+                                );
+                              } else {
+                                _goToNextPage();
+                              }
+                            }
+                          : null,
+                      child: Text(
+                        _currentPage == rulesText.length - 1 ? "Done" : "Next",
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
-          ),
-        ),
-      ],
-    );
+          );
   }
 }
