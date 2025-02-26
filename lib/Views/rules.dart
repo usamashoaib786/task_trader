@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:task_trader/Resources/app_button.dart';
 import 'package:task_trader/Resources/app_text.dart';
+import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Services/rule_service.dart';
 import 'package:task_trader/Views/home_screen.dart';
 
@@ -62,13 +64,26 @@ class _RulesState extends State<Rules> {
 
   @override
   Widget build(BuildContext context) {
-    return rulesText.length == 0
+    return rulesText.isEmpty
         ? Center(
-            child: AppText.appText(
-            "No Rules Found Yet, Add some rules!",
-            textColor: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.w400,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AppText.appText(
+                "No Rules Found Yet, Add some rules!",
+                textAlign: TextAlign.center,
+                textColor: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+              ),
+              SizedBox(height: 10,),
+              AppButton.appButton("Add",
+                  width: 150,
+                  height: 50.0,
+                  textColor: AppTheme.appColor,
+                  fontWeight: FontWeight.w800,
+                  backgroundColor: AppTheme.white)
+            ],
           ))
         : Column(
             children: [

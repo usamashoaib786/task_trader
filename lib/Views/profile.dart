@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:task_trader/Resources/app_bar.dart';
 import 'package:task_trader/Resources/app_button.dart';
 import 'package:task_trader/Resources/app_field.dart';
@@ -20,7 +22,7 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   List<Map<String, dynamic>> profiles = [];
   bool _isEditing = false;
-
+  String? _pickedFilePath;
   TextEditingController fullName = TextEditingController();
   TextEditingController emailAddress = TextEditingController();
   TextEditingController password = TextEditingController();
@@ -32,7 +34,20 @@ class _ProfileState extends State<Profile> {
     _fetchProfiles();
   }
 
+  pickImage() async {
+    final ImagePicker picker = ImagePicker();
+
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _pickedFilePath = image.path;
+        // updateProfile();
+      });
+    }
+  }
+
   void _fetchProfiles() async {
+    print("feetchiing.....");
     Map<String, dynamic>? userProfile =
         await ProfileService().fetchUserProfile();
 
@@ -41,6 +56,7 @@ class _ProfileState extends State<Profile> {
         fullName.text = userProfile["name"] ?? "";
         phoneNumber.text = userProfile["number"] ?? "";
         emailAddress.text = userProfile["email"] ?? "";
+        _pickedFilePath = userProfile["imageUrl"] ?? null;
       });
     } else {
       if (kDebugMode) {
@@ -91,20 +107,75 @@ class _ProfileState extends State<Profile> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 40),
-              CircleAvatar(
-                backgroundColor: Color(0XFFFFD9AF),
-                radius: 58,
-                backgroundImage: AssetImage(Images.memojiBoysAvtar),
-                child: Stack(children: [
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: CircleAvatar(
-                      radius: 18,
-                      child: Icon(Icons.camera),
-                    ),
-                  ),
-                ]),
-              ),
+              SizedBox(
+                  height: 140,
+                  width: 140,
+                  child: Stack(
+                    children: [
+                      Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  width: 2, color: AppTheme.appColor),
+                              borderRadius: BorderRadius.circular(100)),
+                          child: Container(
+                            height: 140,
+                            width: 140,
+                            decoration: BoxDecoration(
+                                color: AppTheme.appColor,
+                                shape: BoxShape.circle),
+                            child: _pickedFilePath != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: _pickedFilePath!.startsWith("http")
+                                        ? Image.network(
+                                            _pickedFilePath!,
+                                            width: 200,
+                                            height: 200,
+                                            fit: BoxFit.fill,
+                                          )
+                                        : Image.file(
+                                            File(_pickedFilePath!),
+                                            width: 200,
+                                            height: 200,
+                                            fit: BoxFit.fill,
+                                          ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: Image.asset(
+                                      Images.memojiBoysAvtar,
+                                      height: 66,
+                                      width: 66,
+                                    ),
+                                  ),
+                          )),
+                      if (_isEditing)
+                        GestureDetector(
+                          onTap: () {
+                            pickImage();
+                          },
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: Container(
+                                height: 40,
+                                width: 40,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppTheme.white),
+                                child: Icon(
+                                  Icons.camera,
+                                  color: AppTheme.appColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  )),
               SizedBox(height: 40),
               CustomAppFormField(
                 texthint: "Full Name",
@@ -148,9 +219,15 @@ class _ProfileState extends State<Profile> {
                             Center(child: CircularProgressIndicator()),
                       );
 
+                      String? imageUrl;
+                      if (_pickedFilePath != null) {
+                        imageUrl = await ProfileService()
+                            .uploadProfileImage(File(_pickedFilePath!));
+                      }
                       await AuthService().updateUserInfo(
                         name: fullName.text,
                         //  email: emailAddress.text,
+                        imageUrl: imageUrl,
                         number: phoneNumber.text,
                         context: context,
                       );
@@ -168,40 +245,42 @@ class _ProfileState extends State<Profile> {
                   },
                 ),
               SizedBox(height: 40),
-              GestureDetector(
-                onTap: () async {
-                  showDialog(
-                    context: context,
-                    barrierDismissible:
-                        false, // Prevent closing by tapping outside
-                    builder: (context) =>
-                        Center(child: CircularProgressIndicator()),
-                  );
+              if (!_isEditing)
+                GestureDetector(
+                  onTap: () async {
+                    showDialog(
+                      context: context,
+                      barrierDismissible:
+                          false, // Prevent closing by tapping outside
+                      builder: (context) =>
+                          Center(child: CircularProgressIndicator()),
+                    );
 
-                  await AuthService().signOutUser();
-                  if (!context.mounted) return;
-                  Navigator.of(context).pop();
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => Login()),
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.logout,
-                      color: AppTheme.appColor,
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      "Logout",
-                      style: TextStyle(color: AppTheme.appColor, fontSize: 16),
-                    ),
-                    SizedBox(width: 15),
-                  ],
+                    await AuthService().signOutUser();
+                    if (!context.mounted) return;
+                    Navigator.of(context).pop();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Login()),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.logout,
+                        color: AppTheme.appColor,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        "Logout",
+                        style:
+                            TextStyle(color: AppTheme.appColor, fontSize: 16),
+                      ),
+                      SizedBox(width: 15),
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
         ),

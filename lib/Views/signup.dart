@@ -151,6 +151,8 @@ class _SignupState extends State<Signup> {
                   children: [
                     AppText.appText("Already have an account ? "),
                     GestureDetector(
+                      
+                      
                         onTap: () {
                           pushReplacement(context, Login());
                         },
