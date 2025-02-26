@@ -82,22 +82,43 @@ class _ProfileState extends State<Profile> {
         color: AppTheme.white,
         actions: [
           GestureDetector(
-            onTap: _toggleEdit,
-            child: Row(
-              children: [
-                Icon(
-                  _isEditing ? Icons.cancel : Icons.edit,
-                  color: AppTheme.appColor,
-                ),
-                SizedBox(width: 5),
-                Text(
-                  _isEditing ? "Cancel" : "Edit Profile",
-                  style: TextStyle(color: AppTheme.appColor, fontSize: 16),
-                ),
-                SizedBox(width: 15),
-              ],
+            onTap: () async {
+              _toggleEdit();
+              showDialog(
+                context: context,
+                barrierDismissible: false, // Prevent closing by tapping outside
+                builder: (context) =>
+                    Center(child: CircularProgressIndicator()),
+              );
+
+              await AuthService().signOutUser();
+              if (!context.mounted) return;
+              Navigator.of(context).pop();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => Login()),
+              );
+            },
+            child: Icon(
+              Icons.logout,
+              color: AppTheme.appColor,
             ),
+            // child: Row(
+            //   children: [
+            //     Icon(
+            //       _isEditing ? Icons.cancel : Icons.edit,
+            //       color: AppTheme.appColor,
+            //     ),
+            //     SizedBox(width: 5),
+            //     Text(
+            //       _isEditing ? "Cancel" : "Edit Profile",
+            //       style: TextStyle(color: AppTheme.appColor, fontSize: 16),
+            //     ),
+            //     SizedBox(width: 15),
+            //   ],
+            // ),
           ),
+          SizedBox(width: 10),
         ],
       ),
       body: SingleChildScrollView(
@@ -201,86 +222,64 @@ class _ProfileState extends State<Profile> {
                 enabled: _isEditing,
               ),
               SizedBox(height: 40),
-              if (_isEditing)
-                AppButton.appButton(
-                  "Save",
-                  width: ScreenSize(context).width,
-                  height: 62,
-                  radius: 28.0,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w400,
-                  onTap: () async {
-                    try {
-                      showDialog(
-                        context: context,
-                        barrierDismissible:
-                            false, // Prevent closing by tapping outside
-                        builder: (context) =>
-                            Center(child: CircularProgressIndicator()),
-                      );
+              AppButton.appButton(
+                !_isEditing ? "Edit Profile" : "Save",
+                width: ScreenSize(context).width,
+                height: 62,
+                radius: 28.0,
+                fontSize: 20,
+                fontWeight: FontWeight.w400,
+                onTap: !_isEditing
+                    ? _toggleEdit
+                    : () async {
+                        _toggleEdit();
+                        try {
+                          showDialog(
+                            context: context,
+                            barrierDismissible:
+                                false, // Prevent closing by tapping outside
+                            builder: (context) =>
+                                Center(child: CircularProgressIndicator()),
+                          );
 
-                      String? imageUrl;
-                      if (_pickedFilePath != null) {
-                        imageUrl = await ProfileService()
-                            .uploadProfileImage(File(_pickedFilePath!));
-                      }
-                      await AuthService().updateUserInfo(
-                        name: fullName.text,
-                        //  email: emailAddress.text,
-                        imageUrl: imageUrl,
-                        number: phoneNumber.text,
-                        context: context,
-                      );
-                      if (!context.mounted) return;
-                      Navigator.of(context).pop();
-                      setState(() {
-                        _isEditing = false;
-                      });
+                          String? imageUrl;
+                          if (_pickedFilePath != null) {
+                            imageUrl = await ProfileService()
+                                .uploadProfileImage(File(_pickedFilePath!));
+                          }
+                          await AuthService().updateUserInfo(
+                            name: fullName.text,
+                            //  email: emailAddress.text,
+                            imageUrl: imageUrl,
+                            number: phoneNumber.text,
+                            context: context,
+                          );
+                          if (!context.mounted) return;
+                          Navigator.of(context).pop();
+                          setState(() {
+                            _isEditing = false;
+                          });
 
-                      AuthService().showToast("Profile updated successfully!");
-                    } catch (e) {
-                      Navigator.of(context).pop();
-                      AuthService().showToast("Error: $e");
-                    }
-                  },
-                ),
+                          AuthService()
+                              .showToast("Profile updated successfully!");
+                        } catch (e) {
+                          Navigator.of(context).pop();
+                          AuthService().showToast("Error: $e");
+                        }
+                      },
+              ),
               SizedBox(height: 40),
-              if (!_isEditing)
-                GestureDetector(
-                  onTap: () async {
-                    showDialog(
-                      context: context,
-                      barrierDismissible:
-                          false, // Prevent closing by tapping outside
-                      builder: (context) =>
-                          Center(child: CircularProgressIndicator()),
-                    );
+              // if (!_isEditing)
+              //   AppButton.appButton(
+              //     "Edit Profile",
+              //     width: ScreenSize(context).width,
+              //     height: 62,
+              //     radius: 28.0,
+              //     fontSize: 20,
+              //     fontWeight: FontWeight.w400,
+              //     onTap: _toggleEdit,
 
-                    await AuthService().signOutUser();
-                    if (!context.mounted) return;
-                    Navigator.of(context).pop();
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => Login()),
-                    );
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.logout,
-                        color: AppTheme.appColor,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        "Logout",
-                        style:
-                            TextStyle(color: AppTheme.appColor, fontSize: 16),
-                      ),
-                      SizedBox(width: 15),
-                    ],
-                  ),
-                ),
+              //   ),
             ],
           ),
         ),

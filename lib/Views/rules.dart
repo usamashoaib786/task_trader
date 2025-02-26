@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:task_trader/Resources/app_button.dart';
 import 'package:task_trader/Resources/app_text.dart';
 import 'package:task_trader/Resources/app_theme.dart';
+import 'package:task_trader/Resources/utils.dart';
 import 'package:task_trader/Services/rule_service.dart';
+import 'package:task_trader/Views/add_rule.dart';
 import 'package:task_trader/Views/home_screen.dart';
 
 class Rules extends StatefulWidget {
@@ -31,6 +33,7 @@ class _RulesState extends State<Rules> {
 
   Future<void> fetchRulesData() async {
     List<String> fetchedRules = await RulesService().fetchRules();
+    if (!mounted) return;
     setState(() {
       rulesText = fetchedRules;
       _isChecked.clear();
@@ -67,7 +70,7 @@ class _RulesState extends State<Rules> {
     return rulesText.isEmpty
         ? Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               AppText.appText(
                 "No Rules Found Yet, Add some rules!",
@@ -76,13 +79,18 @@ class _RulesState extends State<Rules> {
                 fontSize: 20,
                 fontWeight: FontWeight.w400,
               ),
-              SizedBox(height: 10,),
-              AppButton.appButton("Add",
-                  width: 150,
-                  height: 50.0,
-                  textColor: AppTheme.appColor,
-                  fontWeight: FontWeight.w800,
-                  backgroundColor: AppTheme.white)
+              SizedBox(
+                height: 10,
+              ),
+              AppButton.appButton(
+                "Add",
+                width: 150,
+                height: 50.0,
+                textColor: AppTheme.appColor,
+                fontWeight: FontWeight.w800,
+                backgroundColor: AppTheme.white,
+                // onTap: push(context, AddNewRule())
+              )
             ],
           ))
         : Column(

@@ -30,11 +30,11 @@ class ProfileService {
   Future<Map<String, dynamic>?> fetchUserProfile() async {
     DocumentSnapshot docSnapshot =
         await _firestore.collection("users").doc(uid).get();
-   
-      print("snapsot$docSnapshot");
-    
+
+    print("snapsot$docSnapshot");
+
     if (docSnapshot.exists) {
-      return docSnapshot.data() as Map<String, dynamic>?;
+      return docSnapshot.get("profile") as Map<String, dynamic>?;
     }
     return null;
   }

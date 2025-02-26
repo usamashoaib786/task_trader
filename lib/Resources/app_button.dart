@@ -24,6 +24,8 @@ class AppButton {
       bool? border,
       bool? blurContainer}) {
     return InkWell(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       onTap: onTap,
       child: Container(
         alignment: Alignment.center,
