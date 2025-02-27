@@ -93,39 +93,6 @@ class AuthService {
       return false;
     }
   }
-
-  // Future<void> updateUserInfo({
-  //   String? name,
-  //   String? number,
-
-  //   required BuildContext context,
-  // }) async {
-  //   try {
-  //     User? user = FirebaseAuth.instance.currentUser;
-  //     String uid = FirebaseAuth.instance.currentUser!.uid;
-
-  //     if (user != null) {
-  //       await user.updateDisplayName(name);
-
-  //       DocumentReference docRef =
-  //           FirebaseFirestore.instance.collection("users").doc(uid);
-
-  //       // Use merge option to update without deleting existing fields
-  //       await docRef.set({
-  //         "profile": {
-  //           if (name != null) "name": name,
-  //           if (number != null) "number": number,
-  //         }
-  //       }, SetOptions(merge: true));
-
-  //       showToast("User info updated successfully!");
-  //     } else {
-  //       throw Exception("No user is signed in.");
-  //     }
-  //   } catch (e) {
-  //     throw Exception("Failed to update user info: $e");
-  //   }
-  // }
  Future<void> updateUserInfo({
   String? name,
   String? number,

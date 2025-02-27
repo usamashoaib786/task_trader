@@ -7,7 +7,8 @@ import 'package:task_trader/Views/profile.dart';
 
 class BottomNavView extends StatefulWidget {
   final bool? showPopup;
-  const BottomNavView({super.key, this.showPopup});
+  final int? index;
+  const BottomNavView({super.key, this.showPopup, this.index});
 
   @override
   State<BottomNavView> createState() => _BottomNavViewState();
@@ -15,13 +16,16 @@ class BottomNavView extends StatefulWidget {
 
 class _BottomNavViewState extends State<BottomNavView> {
   List<Widget> _screens = [];
+  int _currentIndex = 1;
   @override
   void initState() {
     super.initState();
+    if (widget.index != null) {
+      _currentIndex = widget.index!;
+    }
     _screens = [const AddNewRule(), HomeScreen(), Profile()];
   }
 
-  int _currentIndex = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -47,7 +47,6 @@ class _ProfileState extends State<Profile> {
   }
 
   void _fetchProfiles() async {
-    print("feetchiing.....");
     Map<String, dynamic>? userProfile =
         await ProfileService().fetchUserProfile();
 
@@ -56,7 +55,7 @@ class _ProfileState extends State<Profile> {
         fullName.text = userProfile["name"] ?? "";
         phoneNumber.text = userProfile["number"] ?? "";
         emailAddress.text = userProfile["email"] ?? "";
-        _pickedFilePath = userProfile["imageUrl"] ?? null;
+        _pickedFilePath = userProfile["imageUrl"];
       });
     } else {
       if (kDebugMode) {
@@ -77,8 +76,8 @@ class _ProfileState extends State<Profile> {
       backgroundColor: Colors.black,
       appBar: CustomAppBar(
         title: "Profile",
-        fontsize: 20,
-        fontWeight: FontWeight.w600,
+        fontsize: 25,
+        fontWeight: FontWeight.w800,
         color: AppTheme.white,
         actions: [
           GestureDetector(
@@ -99,24 +98,18 @@ class _ProfileState extends State<Profile> {
                 MaterialPageRoute(builder: (context) => Login()),
               );
             },
-            child: Icon(
-              Icons.logout,
-              color: AppTheme.appColor,
+            child: Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                  color: AppTheme.appColor, shape: BoxShape.circle),
+              child: Center(
+                child: Icon(
+                  Icons.logout,
+                  color: AppTheme.white,
+                ),
+              ),
             ),
-            // child: Row(
-            //   children: [
-            //     Icon(
-            //       _isEditing ? Icons.cancel : Icons.edit,
-            //       color: AppTheme.appColor,
-            //     ),
-            //     SizedBox(width: 5),
-            //     Text(
-            //       _isEditing ? "Cancel" : "Edit Profile",
-            //       style: TextStyle(color: AppTheme.appColor, fontSize: 16),
-            //     ),
-            //     SizedBox(width: 15),
-            //   ],
-            // ),
           ),
           SizedBox(width: 10),
         ],
@@ -269,17 +262,6 @@ class _ProfileState extends State<Profile> {
                       },
               ),
               SizedBox(height: 40),
-              // if (!_isEditing)
-              //   AppButton.appButton(
-              //     "Edit Profile",
-              //     width: ScreenSize(context).width,
-              //     height: 62,
-              //     radius: 28.0,
-              //     fontSize: 20,
-              //     fontWeight: FontWeight.w400,
-              //     onTap: _toggleEdit,
-
-              //   ),
             ],
           ),
         ),

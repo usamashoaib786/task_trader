@@ -4,7 +4,7 @@ import 'package:task_trader/Resources/app_text.dart';
 import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/utils.dart';
 import 'package:task_trader/Services/rule_service.dart';
-import 'package:task_trader/Views/add_rule.dart';
+import 'package:task_trader/Views/bottom_navigation_bar.dart';
 import 'package:task_trader/Views/home_screen.dart';
 
 class Rules extends StatefulWidget {
@@ -84,6 +84,9 @@ class _RulesState extends State<Rules> {
               ),
               AppButton.appButton(
                 "Add",
+                onTap: () {
+                  pushUntil(context, BottomNavView(index: 0,));
+                },
                 width: 150,
                 height: 50.0,
                 textColor: AppTheme.appColor,

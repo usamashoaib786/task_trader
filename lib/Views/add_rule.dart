@@ -25,10 +25,9 @@ class _AddNewRuleState extends State<AddNewRule> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: CustomAppBar(
-        leadingIcon: Images.backIconBlack,
         title: "Create Rule",
-        fontsize: 20,
-        fontWeight: FontWeight.w600,
+        fontsize: 25,
+        fontWeight: FontWeight.w800,
         color: AppTheme.white,
       ),
       body: Padding(
