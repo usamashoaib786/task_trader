@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:task_trader/Resources/app_bar_home.dart';
 import 'package:task_trader/Resources/app_button.dart';
@@ -8,6 +9,7 @@ import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/images.dart';
 import 'package:task_trader/Resources/screen_sizes.dart';
 import 'package:task_trader/Resources/utils.dart';
+import 'package:task_trader/Services/profile_service.dart';
 import 'package:task_trader/Views/ai_screen.dart';
 import 'package:task_trader/Views/progress_bar.dart';
 import 'package:task_trader/Views/reward_screen.dart';
@@ -23,6 +25,34 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+ String userName = "Loading..."; // Default value
+ 
+@override
+  initState() {
+    super.initState();
+    _fetchProfiles();
+  }
+
+void _fetchProfiles() async {
+    Map<String, dynamic>? userProfile =
+        await ProfileService().fetchUserProfile();
+
+    if (userProfile != null && mounted) {
+      setState(() {
+         userName = userProfile["name"];
+       
+      });
+    } else {
+      if (kDebugMode) {
+        print("Profile not found! fetchProfiles ");
+      }
+    }
+  }
+
+
+
+
   @override
   Widget build(BuildContext context) {
     // WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -32,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
-        appBar: const AppBarHome(),
+        appBar: AppBarHome(userDisplayName: userName ,),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),

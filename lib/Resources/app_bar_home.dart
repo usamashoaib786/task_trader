@@ -6,7 +6,8 @@ import 'package:task_trader/Views/notification.dart';
 import 'package:task_trader/Views/reward_screen.dart';
 
 class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
-  const AppBarHome({super.key});
+  final String userDisplayName ;
+  const AppBarHome({super.key, required this.userDisplayName});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +28,7 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                AppText.appText("Hi, Usama!",
+                AppText.appText("Hi, $userDisplayName!",
                     textColor: AppTheme.whiteColor,
                     fontSize: 18,
                     fontWeight: FontWeight.w700),

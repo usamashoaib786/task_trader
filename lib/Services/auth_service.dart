@@ -54,6 +54,7 @@ class AuthService {
       }
     } catch (e) {
       showToast("Un-Known Error Occured");
+      if (!context.mounted) return;
       Navigator.of(context).pop();
       isLoading.value = false; // Ensure loading state is reset on unknown error
     }
@@ -79,6 +80,7 @@ class AuthService {
         );
       });
     } on FirebaseAuthException catch (e) {
+      if (!context.mounted) return;
       Navigator.of(context).pop();
       if (!context.mounted) return;
       _handleAuthError(e, context);

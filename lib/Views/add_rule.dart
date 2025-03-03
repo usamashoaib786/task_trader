@@ -6,9 +6,9 @@ import 'package:task_trader/Resources/app_button.dart';
 import 'package:task_trader/Resources/app_field.dart';
 import 'package:task_trader/Resources/app_text.dart';
 import 'package:task_trader/Resources/app_theme.dart';
-import 'package:task_trader/Resources/images.dart';
 import 'package:task_trader/Resources/screen_sizes.dart';
 import 'package:task_trader/Services/rule_service.dart';
+import 'package:task_trader/Views/del_rule.dart';
 
 class AddNewRule extends StatefulWidget {
   const AddNewRule({super.key});
@@ -44,6 +44,24 @@ class _AddNewRuleState extends State<AddNewRule> {
               texthint: "Enter New Rule",
               controller: _newRule,
             ),
+            Spacer(),
+            Container(
+                width: ScreenSize(context).width,
+                height: 200,
+                decoration: BoxDecoration(
+                   
+                    borderRadius: BorderRadius.circular(10)),
+                child:  Column(
+                  children: [
+                    Text("Your Rules",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400)),
+                    SizedBox(height: 10),
+                    Expanded(child: DelRules())
+                  ],
+                )  ),
             Spacer(),
             Padding(
               padding: const EdgeInsets.only(bottom: 40.0),

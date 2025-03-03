@@ -6,8 +6,10 @@ import 'package:task_trader/Resources/app_bar.dart';
 import 'package:task_trader/Resources/app_button.dart';
 import 'package:task_trader/Resources/app_field.dart';
 import 'package:task_trader/Resources/app_theme.dart';
+import 'package:task_trader/Resources/custom_dialogue.dart';
 import 'package:task_trader/Resources/images.dart';
 import 'package:task_trader/Resources/screen_sizes.dart';
+import 'package:task_trader/Resources/utils.dart';
 import 'package:task_trader/Services/auth_service.dart';
 import 'package:task_trader/Services/profile_service.dart';
 import 'package:task_trader/Views/login.dart';
@@ -59,7 +61,7 @@ class _ProfileState extends State<Profile> {
       });
     } else {
       if (kDebugMode) {
-        print("Profile not found!");
+        print("Profile not found! _fetchProfiles");
       }
     }
   }
@@ -82,20 +84,34 @@ class _ProfileState extends State<Profile> {
         actions: [
           GestureDetector(
             onTap: () async {
-              _toggleEdit();
               showDialog(
                 context: context,
-                barrierDismissible: false, // Prevent closing by tapping outside
-                builder: (context) =>
-                    Center(child: CircularProgressIndicator()),
-              );
+                barrierDismissible: false,
+                builder: (context) => Center(
+                    child: CustomDialog(
+                  title: "Are you sure you want to log out?",
+                  onNoTap: () {
+                    Navigator.pop(context);
+                  },
+                  onYesTap: () async {
+                    showDialog(
+                      context: context,
+                      barrierDismissible:
+                          false, // Prevent closing by tapping outside
+                      builder: (context) =>
+                          Center(child: CircularProgressIndicator()),
+                    );
 
-              await AuthService().signOutUser();
-              if (!context.mounted) return;
-              Navigator.of(context).pop();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => Login()),
+                    await AuthService().signOutUser();
+
+                    Future.delayed(const Duration(seconds: 1), () {
+                      if (!context.mounted) return;
+                      Navigator.of(context).pop();
+
+                      pushUntil(context, Login());
+                    });
+                  },
+                )),
               );
             },
             child: Container(
@@ -225,40 +241,57 @@ class _ProfileState extends State<Profile> {
                 onTap: !_isEditing
                     ? _toggleEdit
                     : () async {
-                        _toggleEdit();
-                        try {
-                          showDialog(
-                            context: context,
-                            barrierDismissible:
-                                false, // Prevent closing by tapping outside
-                            builder: (context) =>
-                                Center(child: CircularProgressIndicator()),
-                          );
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (context) => Center(
+                              child: CustomDialog(
+                            title: "Do You want to save all changes?",
+                            onNoTap: () {
+                              _toggleEdit();
 
-                          String? imageUrl;
-                          if (_pickedFilePath != null) {
-                            imageUrl = await ProfileService()
-                                .uploadProfileImage(File(_pickedFilePath!));
-                          }
-                          await AuthService().updateUserInfo(
-                            name: fullName.text,
-                            //  email: emailAddress.text,
-                            imageUrl: imageUrl,
-                            number: phoneNumber.text,
-                            context: context,
-                          );
-                          if (!context.mounted) return;
-                          Navigator.of(context).pop();
-                          setState(() {
-                            _isEditing = false;
-                          });
+                              Navigator.pop(context);
+                            },
+                            onYesTap: () async {
+                              try {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible:
+                                      false, // Prevent closing by tapping outside
+                                  builder: (context) => Center(
+                                      child: CircularProgressIndicator()),
+                                );
 
-                          AuthService()
-                              .showToast("Profile updated successfully!");
-                        } catch (e) {
-                          Navigator.of(context).pop();
-                          AuthService().showToast("Error: $e");
-                        }
+                                String? imageUrl;
+                                if (_pickedFilePath != null) {
+                                  imageUrl = await ProfileService()
+                                      .uploadProfileImage(
+                                          File(_pickedFilePath!));
+                                }
+                                if (!context.mounted) return;
+                                await AuthService().updateUserInfo(
+                                  name: fullName.text,
+                                  //  email: emailAddress.text,
+                                  imageUrl: imageUrl,
+                                  number: phoneNumber.text,
+                                  context: context,
+                                );
+                                if (!context.mounted) return;
+                                Navigator.of(context).pop();
+
+                                _toggleEdit();
+                                setState(() {
+                                  _isEditing = false;
+                                });
+                              } catch (e) {
+                                Navigator.of(context).pop();
+                                AuthService().showToast("Error: $e");
+                              }
+
+                              Navigator.of(context).pop();
+                            },
+                          )),
+                        );
                       },
               ),
               SizedBox(height: 40),
