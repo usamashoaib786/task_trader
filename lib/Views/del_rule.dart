@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:task_trader/Resources/app_text.dart';
 import 'package:task_trader/Resources/app_theme.dart';
+import 'package:task_trader/Resources/custom_dialogue.dart';
 import 'package:task_trader/Resources/screen_sizes.dart';
 import 'package:task_trader/Services/rule_service.dart';
 
@@ -47,61 +47,85 @@ class _DelRulesState extends State<DelRules> {
         ? Center(
            
           )
-        : Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: SizedBox(
-              height: 100, // Adjust height as needed
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: rulesText.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: ScreenSize(context).width * 0.7,
-                 
-                    margin: const EdgeInsets.symmetric(horizontal: 8),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: AppTheme.appColor,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 5,
-                          spreadRadius: 2,
-                        ),
-                      ],
-                    ),
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            width: ScreenSize(context).width * 0.54,
-                            child: Text(
-                              rulesText[index],
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              textAlign: TextAlign.left,
+        : Column(
+          children: [
+            Text("Your Rules",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400)),
+                    SizedBox(height: 10),
+            Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SizedBox(
+                  height: 400,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: rulesText.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        width: ScreenSize(context).width * 0.7,
+                     
+                        margin: const EdgeInsets.symmetric(horizontal: 8),
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: index % 2 == 0 ? AppTheme.rulesColor1 : AppTheme.rulesColor2,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 5,
+                              spreadRadius: 2,
                             ),
-                          ),
+                          ],
                         ),
-                        Positioned(
-                          top: 1,
-                          right: 1,
-                          child: IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
-                            onPressed: () => _deleteRule(index),
-                          ),
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Container(
+                                width: ScreenSize(context).width * 0.54,
+                                child: Text(
+                                  rulesText[index],
+                                  style: TextStyle(
+                                    color: AppTheme.rulesTextColor,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  textAlign: TextAlign.left,
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: 1,
+                              right: 1,
+                              child: IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.red),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => CustomDialog(
+                                      title: "Delete Rule?",
+                                       onYesTap: () {
+                                        _deleteRule(index);
+                                        Navigator.pop(context);
+                                      },
+                                      onNoTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  );
-                },
+                      );
+                    },
+                  ),
+                ),
               ),
-            ),
-          );
+          ],
+        );
   }
 }

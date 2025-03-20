@@ -53,6 +53,12 @@ class _RulesState extends State<Rules> {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
+    } else {
+      // Changed: Allow the final page to show a dialog regardless of checkbox state
+      showDialog(
+        context: context,
+        builder: (context) => CustomDialog(),
+      );
     }
   }
 
@@ -170,26 +176,32 @@ class _RulesState extends State<Rules> {
                         onPressed: _goToPreviousPage,
                         child: const Text("Previous"),
                       ),
-                    ElevatedButton(
-                      onPressed: (_isChecked.isNotEmpty &&
-                              _isChecked.length > _currentPage &&
-                              _isChecked[_currentPage])
-                          ? () {
-                              if (_currentPage == rulesText.length - 1) {
-                                // Final action when Done is clicked
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => CustomDialog(),
-                                );
-                              } else {
-                                _goToNextPage();
-                              }
-                            }
-                          : null,
+                       ElevatedButton(
+                      onPressed: _goToNextPage, // Changed: Allow navigation regardless of checkbox state
                       child: Text(
                         _currentPage == rulesText.length - 1 ? "Done" : "Next",
                       ),
                     ),
+                    // ElevatedButton(
+                    //   onPressed: (_isChecked.isNotEmpty &&
+                    //           _isChecked.length > _currentPage &&
+                    //           _isChecked[_currentPage])
+                    //       ? () {
+                    //           if (_currentPage == rulesText.length - 1) {
+                    //             // Final action when Done is clicked
+                    //             showDialog(
+                    //               context: context,
+                    //               builder: (context) => CustomDialog(),
+                    //             );
+                    //           } else {
+                    //             _goToNextPage();
+                    //           }
+                    //         }
+                    //       : null,
+                    //   child: Text(
+                    //     _currentPage == rulesText.length - 1 ? "Done" : "Next",
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

@@ -36,17 +36,17 @@ class _ProfileState extends State<Profile> {
     _fetchProfiles();
   }
 
-  pickImage() async {
-    final ImagePicker picker = ImagePicker();
+  // pickImage() async {
+  //   final ImagePicker picker = ImagePicker();
 
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        _pickedFilePath = image.path;
-        // updateProfile();
-      });
-    }
-  }
+  //   final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+  //   if (image != null) {
+  //     setState(() {
+  //       _pickedFilePath = image.path;
+  //       // updateProfile();
+  //     });
+  //   }
+  // }
 
   void _fetchProfiles() async {
     Map<String, dynamic>? userProfile =
@@ -57,7 +57,7 @@ class _ProfileState extends State<Profile> {
         fullName.text = userProfile["name"] ?? "";
         phoneNumber.text = userProfile["number"] ?? "";
         emailAddress.text = userProfile["email"] ?? "";
-        _pickedFilePath = userProfile["imageUrl"];
+        // _pickedFilePath = userProfile["imageUrl"];
       });
     } else {
       if (kDebugMode) {
@@ -180,30 +180,30 @@ class _ProfileState extends State<Profile> {
                                     ),
                                   ),
                           )),
-                      if (_isEditing)
-                        GestureDetector(
-                          onTap: () {
-                            pickImage();
-                          },
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(100)),
-                              child: Container(
-                                height: 40,
-                                width: 40,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: AppTheme.white),
-                                child: Icon(
-                                  Icons.camera,
-                                  color: AppTheme.appColor,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                      // if (_isEditing)
+                      //   GestureDetector(
+                      //     onTap: () {
+                      //        pickImage();
+                      //     },
+                      //     child: Align(
+                      //       alignment: Alignment.bottomRight,
+                      //       child: Card(
+                      //         shape: RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.circular(100)),
+                      //         child: Container(
+                      //           height: 40,
+                      //           width: 40,
+                      //           decoration: BoxDecoration(
+                      //               shape: BoxShape.circle,
+                      //               color: AppTheme.white),
+                      //           child: Icon(
+                      //             Icons.camera,
+                      //             color: AppTheme.appColor,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
                     ],
                   )),
               SizedBox(height: 40),
@@ -262,17 +262,17 @@ class _ProfileState extends State<Profile> {
                                       child: CircularProgressIndicator()),
                                 );
 
-                                String? imageUrl;
-                                if (_pickedFilePath != null) {
-                                  imageUrl = await ProfileService()
-                                      .uploadProfileImage(
-                                          File(_pickedFilePath!));
-                                }
+                                // String? imageUrl;
+                                // if (_pickedFilePath != null) {
+                                //   imageUrl = await ProfileService()
+                                //       .uploadProfileImage(
+                                //           File(_pickedFilePath!));
+                                // }
                                 if (!context.mounted) return;
                                 await AuthService().updateUserInfo(
                                   name: fullName.text,
                                   //  email: emailAddress.text,
-                                  imageUrl: imageUrl,
+                                  // imageUrl: imageUrl,
                                   number: phoneNumber.text,
                                   context: context,
                                 );

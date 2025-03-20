@@ -44,24 +44,16 @@ class _AddNewRuleState extends State<AddNewRule> {
               texthint: "Enter New Rule",
               controller: _newRule,
             ),
-            Spacer(),
+            SizedBox(
+              height: 20,
+            ),
             Container(
                 width: ScreenSize(context).width,
-                height: 200,
+                //height: 200,
                 decoration: BoxDecoration(
                    
                     borderRadius: BorderRadius.circular(10)),
-                child:  Column(
-                  children: [
-                    Text("Your Rules",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400)),
-                    SizedBox(height: 10),
-                    Expanded(child: DelRules())
-                  ],
-                )  ),
+                child:  DelRules() ),
             Spacer(),
             Padding(
               padding: const EdgeInsets.only(bottom: 40.0),
@@ -94,6 +86,9 @@ class _AddNewRuleState extends State<AddNewRule> {
                               context: context,
                               builder: (context) => NewRuleDialog(),
                             );
+                            setState(() {
+                              
+                            });
                           }
                         : () {
                             Fluttertoast.showToast(

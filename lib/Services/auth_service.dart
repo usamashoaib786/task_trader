@@ -52,6 +52,8 @@ class AuthService {
         if (!context.mounted) return;
         _handleAuthError(e, context);
       }
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
     } catch (e) {
       showToast("Un-Known Error Occured");
       if (!context.mounted) return;
