@@ -8,17 +8,32 @@ import 'package:task_trader/Resources/screen_sizes.dart';
 import 'package:task_trader/Views/progress_bar.dart';
 
 class YourRewardStatus extends StatefulWidget {
-  const YourRewardStatus({super.key});
+  final bool allRulesSelected;
+
+  const YourRewardStatus({super.key, required this.allRulesSelected});
 
   @override
   State<YourRewardStatus> createState() => _YourRewardStatusState();
 }
 
 class _YourRewardStatusState extends State<YourRewardStatus> {
+int currentLevel = 3;
+  
   bool isBronzeChecked = false;
   bool isSilverChecked = false;
   bool isGoldChecked = false;
   bool isPlatinumChecked = false;
+
+@override
+  void initState() {
+    super.initState();
+    
+    
+    if (widget.allRulesSelected != false) {
+      currentLevel = (currentLevel - 1).clamp(0, 5);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +52,7 @@ class _YourRewardStatusState extends State<YourRewardStatus> {
               SizedBox(
                 height: 20,
               ),
-              AppText.appText("Trade Unsuccessful!",
+              AppText.appText(widget.allRulesSelected ? "Trade Sucessfull" : "Trade Unscessfull",
                   textColor: AppTheme.white,
                   fontSize: 22,
                   fontWeight: FontWeight.w700),
@@ -62,7 +77,7 @@ class _YourRewardStatusState extends State<YourRewardStatus> {
                 height: 10,
               ),
               TierProgressBar(
-                currentLevel: 3, // Set current level (e.g., 3 out of 5)
+                currentLevel: currentLevel, // Set current level (e.g., 3 out of 5)
                 totalLevels: 5, // Total levels
               ),
               SizedBox(

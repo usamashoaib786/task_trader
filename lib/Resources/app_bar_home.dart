@@ -47,7 +47,7 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
             children: [
               InkWell(
                 onTap: () {
-                  push(context, YourRewardStatus());
+                  //push(context, YourRewardStatus());
                 },
                 child: Image.asset(
                   "assets/images/bronzeBadge.png",

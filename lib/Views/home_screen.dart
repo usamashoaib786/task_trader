@@ -238,7 +238,9 @@ void _fetchProfiles() async {
 
 //Alert Dialogue Widget used in HomePage
 class CustomDialog extends StatefulWidget {
-  const CustomDialog({super.key});
+ final bool allRulesSelected; 
+
+  const CustomDialog({super.key, required this.allRulesSelected});
 
   @override
   State<CustomDialog> createState() => _CustomDialogState();
@@ -279,7 +281,7 @@ class _CustomDialogState extends State<CustomDialog> {
                             BorderRadius.only(bottomLeft: Radius.circular(12)),
                         backgroundColor: AppTheme.appColor,
                         borderColor: AppTheme.appColor, onTap: () {
-                      push(context, YourRewardStatus());
+                      push(context, YourRewardStatus(allRulesSelected: widget.allRulesSelected,));
                     }),
                   ),
                   Expanded(
@@ -289,7 +291,7 @@ class _CustomDialogState extends State<CustomDialog> {
                         textColor: AppTheme.appColor,
                         backgroundColor: Colors.transparent,
                         borderColor: Colors.transparent, onTap: () {
-                      push(context, AiPowered());
+                      push(context, YourRewardStatus(allRulesSelected: widget.allRulesSelected,));
                     }),
                   )
                 ],

@@ -47,20 +47,22 @@ class _RulesState extends State<Rules> {
     super.dispose();
   }
 
-  void _goToNextPage() {
-    if (_currentPage < rulesText.length - 1) {
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      // Changed: Allow the final page to show a dialog regardless of checkbox state
-      showDialog(
-        context: context,
-        builder: (context) => CustomDialog(),
-      );
-    }
+ void _goToNextPage() {
+  if (_currentPage < rulesText.length - 1) {
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  } else {
+    bool allRulesSelected = _isChecked.every((checked) => checked);
+    
+    showDialog(
+      context: context,
+      builder: (context) => CustomDialog(allRulesSelected: allRulesSelected), 
+    );
   }
+}
+
 
   void _goToPreviousPage() {
     if (_currentPage > 0) {
