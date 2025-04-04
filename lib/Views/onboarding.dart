@@ -3,7 +3,7 @@ import 'package:task_trader/Resources/app_button.dart';
 import 'package:task_trader/Resources/app_text.dart';
 import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/utils.dart';
-import 'package:task_trader/Views/login.dart';
+import 'package:task_trader/Views/Auth%20Screens/login.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});

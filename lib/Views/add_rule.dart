@@ -47,14 +47,13 @@ class _AddNewRuleState extends State<AddNewRule> {
             SizedBox(
               height: 20,
             ),
-            Container(
-                width: ScreenSize(context).width,
-                //height: 200,
-                decoration: BoxDecoration(
-                   
-                    borderRadius: BorderRadius.circular(10)),
-                child:  DelRules() ),
             Spacer(),
+            // Container(
+            //     width: ScreenSize(context).width,
+            //     height: 480,
+            //     decoration:
+            //         BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            //     child: DelRules()),
             Padding(
               padding: const EdgeInsets.only(bottom: 40.0),
               child: ValueListenableBuilder<TextEditingValue>(
@@ -69,6 +68,7 @@ class _AddNewRuleState extends State<AddNewRule> {
                     fontWeight: FontWeight.w400,
                     onTap: value.text.trimLeft().isNotEmpty
                         ? () async {
+                            FocusManager.instance.primaryFocus?.unfocus(); //
                             showDialog(
                               context: context,
                               barrierDismissible: false,
@@ -81,14 +81,9 @@ class _AddNewRuleState extends State<AddNewRule> {
                             _newRule.clear();
                             if (!context.mounted) return;
                             Navigator.pop(context);
-
-                            showDialog(
-                              context: context,
-                              builder: (context) => NewRuleDialog(),
+                            Fluttertoast.showToast(
+                              msg: "Rule Added Succesfully",
                             );
-                            setState(() {
-                              
-                            });
                           }
                         : () {
                             Fluttertoast.showToast(
@@ -144,8 +139,7 @@ class _NewRuleDialogState extends State<NewRuleDialog> {
               child: Row(
                 children: [
                   Expanded(
-                    child: AppButton.appButtonwithspecificRadius(
-                        "Add Another Rule",
+                    child: AppButton.appButtonwithspecificRadius("OK",
                         borderRadius:
                             BorderRadius.only(bottomLeft: Radius.circular(12)),
                         backgroundColor: AppTheme.appColor,

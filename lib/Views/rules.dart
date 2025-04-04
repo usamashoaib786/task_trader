@@ -54,11 +54,11 @@ class _RulesState extends State<Rules> {
       curve: Curves.easeInOut,
     );
   } else {
-    bool allRulesSelected = _isChecked.every((checked) => checked);
+    // bool allRulesSelected = _isChecked.every((checked) => checked);
     
     showDialog(
       context: context,
-      builder: (context) => CustomDialog(allRulesSelected: allRulesSelected), 
+      builder: (context) => CustomDialog(), 
     );
   }
 }
@@ -149,20 +149,6 @@ class _RulesState extends State<Rules> {
                           ),
                           controlAffinity: ListTileControlAffinity.leading,
                         )
-
-                        // CheckboxListTile(
-                        //   value: _isChecked[index],
-                        //   onChanged: (value) {
-                        //     setState(() {
-                        //       _isChecked[index] = value ?? false;
-                        //     });
-                        //   },
-                        //   title: const Text(
-                        //     "I agree to this rule",
-                        //     style: TextStyle(color: Colors.white),
-                        //   ),
-                        //   controlAffinity: ListTileControlAffinity.leading,
-                        // ),
                       ],
                     );
                   },

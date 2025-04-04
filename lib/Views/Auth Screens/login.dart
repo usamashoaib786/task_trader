@@ -6,7 +6,7 @@ import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/screen_sizes.dart';
 import 'package:task_trader/Resources/utils.dart';
 import 'package:task_trader/Services/auth_service.dart';
-import 'package:task_trader/Views/signup.dart';
+import 'package:task_trader/Views/Auth%20Screens/signup.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -82,7 +82,6 @@ class _LoginState extends State<Login> {
                       child: Column(
                         children: [
                           AppButton.appButton(onTap: () async {
-                            
                             if (_email.text.isEmpty || _password.text.isEmpty) {
                               AuthService().showToast("Please fill all fields");
                             } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
@@ -94,13 +93,13 @@ class _LoginState extends State<Login> {
                             } else {
                               try {
                                 showDialog(
-                              context: context,
-                              barrierDismissible:
-                                  false, // Prevent closing by tapping outside
-                              builder: (context) =>
-                                  Center(child: CircularProgressIndicator()),
-                            );
-                            
+                                  context: context,
+                                  barrierDismissible:
+                                      false, // Prevent closing by tapping outside
+                                  builder: (context) => Center(
+                                      child: CircularProgressIndicator()),
+                                );
+
                                 await AuthService().signin(
                                     email: _email.text.trim(),
                                     password: _password.text.trim(),

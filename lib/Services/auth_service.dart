@@ -2,7 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_trader/Resources/pref_keys.dart';
 import 'package:task_trader/Resources/utils.dart';
+import 'package:task_trader/Services/profile_service.dart';
 import 'package:task_trader/Views/bottom_navigation_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -35,15 +38,24 @@ class AuthService {
         'profile': {
           'name': name,
           'email': email,
+          'level': "Bronze",
+          'points': 0,
           'created_at': FieldValue.serverTimestamp(),
         },
         'Rules': [] // Initialize rules as an empty array
       });
 
       isLoading.value = false;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      prefs.setString(PrefKey.userName, name);
+      prefs.setString(PrefKey.email, email);
+      prefs.setString(PrefKey.userLevel, "Bronze");
+      prefs.setString(PrefKey.userPoints, "0");
+
       Future.delayed(const Duration(seconds: 1), () {
         // ignore: use_build_context_synchronously
-        pushReplacement(context, BottomNavView());
+        pushUntil(context, BottomNavView());
       });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -72,6 +84,23 @@ class AuthService {
         email: email,
         password: password,
       );
+      Map<String, dynamic>? userProfile =
+          await ProfileService().fetchUserProfile();
+      if (userProfile != null) {
+        print("User Profile...!  $userProfile");
+        String userName = userProfile["name"];
+        String userEmail = userProfile["email"];
+        String userPhone = userProfile["number"] ?? "";
+        String userLevel = userProfile["level"] ?? "";
+        String userPoints = userProfile["points"] ?? "";
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        prefs.setString(PrefKey.userName, userName);
+        prefs.setString(PrefKey.email, userEmail);
+        prefs.setString(PrefKey.phone, userPhone);
+        prefs.setString(PrefKey.userLevel, userLevel);
+        prefs.setString(PrefKey.userPoints, userPoints);
+      }
 
       Future.delayed(const Duration(seconds: 1), () {
         if (!context.mounted) return;
@@ -97,40 +126,46 @@ class AuthService {
       return false;
     }
   }
- Future<void> updateUserInfo({
-  String? name,
-  String? number,
-  String? imageUrl,
-  required BuildContext context,
-}) async {
-  try {
-    User? user = FirebaseAuth.instance.currentUser;
-    String uid = FirebaseAuth.instance.currentUser!.uid;
 
-    if (user != null) {
-      await user.updateDisplayName(name);
+  Future<void> updateUserInfo({
+    String? name,
+    String? number,
+    String? imageUrl,
+    required BuildContext context,
+  }) async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+      String uid = FirebaseAuth.instance.currentUser!.uid;
 
-      DocumentReference docRef = FirebaseFirestore.instance.collection("users").doc(uid);
+      if (user != null) {
+        await user.updateDisplayName(name);
 
-      await docRef.set({
-        "profile": {
-          if (name != null) "name": name,
-          if (number != null) "number": number,
-          if (imageUrl != null) "imageUrl": imageUrl,
-        }
-      }, SetOptions(merge: true));
+        DocumentReference docRef =
+            FirebaseFirestore.instance.collection("users").doc(uid);
 
-      showToast("User info updated successfully!");
-    } else {
-      throw Exception("No user is signed in.");
+        await docRef.set({
+          "profile": {
+            if (name != null) "name": name,
+            if (number != null) "number": number,
+            if (imageUrl != null) "imageUrl": imageUrl,
+          }
+        }, SetOptions(merge: true));
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        prefs.setString(PrefKey.phone, number!);
+
+        showToast("User info updated successfully!");
+      } else {
+        throw Exception("No user is signed in.");
+      }
+    } catch (e) {
+      throw Exception("Failed to update user info: $e");
     }
-  } catch (e) {
-    throw Exception("Failed to update user info: $e");
   }
-}
 
 ////////////////////////////////////////////////////////////
- void _handleAuthError(FirebaseAuthException e, BuildContext context) {
+  void _handleAuthError(FirebaseAuthException e, BuildContext context) {
     String message;
     switch (e.code) {
       case 'weak-password':

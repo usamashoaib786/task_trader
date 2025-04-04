@@ -1,16 +1,14 @@
 import 'dart:ui';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_trader/Resources/app_bar_home.dart';
 import 'package:task_trader/Resources/app_button.dart';
 import 'package:task_trader/Resources/app_text.dart';
 import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/images.dart';
+import 'package:task_trader/Resources/pref_keys.dart';
 import 'package:task_trader/Resources/screen_sizes.dart';
 import 'package:task_trader/Resources/utils.dart';
-import 'package:task_trader/Services/profile_service.dart';
-import 'package:task_trader/Views/ai_screen.dart';
 import 'package:task_trader/Views/progress_bar.dart';
 import 'package:task_trader/Views/reward_screen.dart';
 import 'package:task_trader/Views/rules.dart';
@@ -25,222 +23,126 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String? userName;
+  String? userPoints;
+  String? userLevel;
 
- String userName = "Loading..."; // Default value
- 
-@override
+  @override
   initState() {
     super.initState();
-    _fetchProfiles();
+    getUserDetail();
   }
 
-void _fetchProfiles() async {
-    Map<String, dynamic>? userProfile =
-        await ProfileService().fetchUserProfile();
+  getUserDetail() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (userProfile != null && mounted) {
-      setState(() {
-         userName = userProfile["name"];
-       
-      });
-    } else {
-      if (kDebugMode) {
-        print("Profile not found! fetchProfiles ");
-      }
-    }
+    setState(() {
+      userName = prefs.getString(PrefKey.userName);
+      userPoints = prefs.getString(PrefKey.userPoints);
+      userLevel = prefs.getString(PrefKey.userLevel);
+    });
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   showPopupDialog(context);
-    // });
-
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: AppBarHome(userDisplayName: userName ,),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 20,
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBarHome(
+        userDisplayName: userName ?? "Is Loading...",
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 20,
+              ),
+              RichText(
+                text: TextSpan(
+                  text: 'Tier Level :   ',
+                  style: TextStyle(color: AppTheme.white, fontSize: 20),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: '$userLevel',
+                        style: TextStyle(
+                            color: AppTheme.appColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold)),
+                  ],
                 ),
-                RichText(
-                  text: TextSpan(
-                    text: 'Tier Level :   ',
-                    style: TextStyle(color: AppTheme.white, fontSize: 20),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: 'Bronze',
-                          style: TextStyle(
-                              color: AppTheme.appColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold)),
-                    ],
-                  ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              TierProgressBar(
+                userPoints: userPoints == null ? 0 : int.parse(userPoints!),
+                totalLevels: userLevel == null
+                    ? 5
+                    : getTotalLevelsForTier(userLevel!), // Total levels
+                userLevel: userLevel ?? "",
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Container(
+                height: 50,
+                width: ScreenSize(context).width,
+                decoration: BoxDecoration(
+                    color: AppTheme.offWhiteColor,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Center(
+                  child: AppText.appText("Check each rule below",
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
+                      textColor: AppTheme.appColor),
                 ),
-                SizedBox(
-                  height: 10,
-                ),
-                TierProgressBar(
-                  currentLevel: 3, // Set current level (e.g., 3 out of 5)
-                  totalLevels: 5, // Total levels
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Container(
-                  height: 50,
-                  width: ScreenSize(context).width,
-                  decoration: BoxDecoration(
-                      color: AppTheme.offWhiteColor,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                child: Card(
+                  shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
-                  child: Center(
-                    child: AppText.appText("Check each rule below",
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        textColor: AppTheme.appColor),
-                  ),
+                  child: Container(
+                      width: ScreenSize(context).width,
+                      height: 400,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(colors: [
+                            Color.fromARGB(255, 132, 124, 134),
+                            AppTheme.appColor
+                          ]),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Rules()),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Container(
-                        width: ScreenSize(context).width,
-                        height: 400,
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(colors: [
-                              Color.fromARGB(255, 132, 124, 134),
-                              AppTheme.appColor
-                            ]),
-                            borderRadius: BorderRadius.circular(10)),
-                        child:  Rules()),
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),
     );
   }
+
+  int getTotalLevelsForTier(String level) {
+    switch (level) {
+      case "Bronze":
+        return 5;
+      case "Silver":
+        return 15;
+      case "Gold":
+        return 30;
+      case "Platinum":
+        return 50;
+      default:
+        return 5; // Default to Bronze if no valid level
+    }
+  }
 }
-
-// class TradingRules extends StatefulWidget {
-//   const TradingRules({super.key});
-
-//   @override
-//   State<TradingRules> createState() => _TradingRulesState();
-// }
-
-// class _TradingRulesState extends State<TradingRules> {
-//   List<String> rules = []; // Store fetched rules
-//   final Set<int> selectedIndices = {}; // Store selected rules
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     fetchRulesData(); // Fetch rules when widget initializes
-//   }
-
-//   Future<void> fetchRulesData() async {
-//     List<String> fetchedRules = await AuthService().fetchRules();
-//     setState(() {
-//       rules = fetchedRules;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         AppText.appText("Current Running Trading Rules",
-//             textColor: AppTheme.whiteColor, fontSize: 20),
-//         const SizedBox(height: 20),
-//         if (rules.isNotEmpty) // Only show rules if available
-//           Container(
-//             decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(20),
-//               color: const Color(0xFF211E41),
-//             ),
-//             padding: const EdgeInsets.all(20),
-//             child: Column(
-//               children: [
-//                 ListView.builder(
-//                   physics: const NeverScrollableScrollPhysics(),
-//                   shrinkWrap: true,
-//                   itemCount: rules.length,
-//                   itemBuilder: (context, index) {
-//                     return Padding(
-//                       padding: const EdgeInsets.symmetric(
-//                           vertical: 10, horizontal: 8),
-//                       child: Container(
-//                         decoration: BoxDecoration(
-//                           color: index % 2 == 0
-//                               ? const Color(0xFFECECEC)
-//                               : const Color(0xFFFCDDEC),
-//                           borderRadius: BorderRadius.circular(20),
-//                         ),
-//                         child: ListTile(
-//                           contentPadding: const EdgeInsets.symmetric(
-//                               horizontal: 15, vertical: 10),
-//                           title: AppText.appText(rules[index]),
-//                           trailing: Radio<bool>(
-//                             value: true,
-//                             groupValue: selectedIndices.contains(index),
-//                             onChanged: (bool? value) {
-//                               setState(() {
-//                                 if (value == true) {
-//                                   selectedIndices.add(index);
-//                                 } else {
-//                                   selectedIndices.remove(index);
-//                                 }
-//                               });
-//                             },
-//                           ),
-//                         ),
-//                       ),
-//                     );
-//                   },
-//                 ),
-//                 const SizedBox(height: 30),
-//                 AppButton.appButton("Next", onTap: () {
-//                   if (selectedIndices.isNotEmpty) {
-//                     print(
-//                         "Selected Rules: ${selectedIndices.map((i) => rules[i]).toList()}");
-//                     showDialog(
-//                       context: context,
-//                       builder: (context) => CustomDialog(),
-//                     );
-//                   } else {
-//                     ScaffoldMessenger.of(context).showSnackBar(
-//                       const SnackBar(
-//                           content: Text("Please select at least one rule.")),
-//                     );
-//                   }
-//                 }),
-//               ],
-//             ),
-//           ),
-//         const SizedBox(height: 70),
-//       ],
-//     );
-//   }
-// }
 
 //Alert Dialogue Widget used in HomePage
 class CustomDialog extends StatefulWidget {
- final bool allRulesSelected; 
-
-  const CustomDialog({super.key, required this.allRulesSelected});
+  const CustomDialog({
+    super.key,
+  });
 
   @override
   State<CustomDialog> createState() => _CustomDialogState();
@@ -281,7 +183,7 @@ class _CustomDialogState extends State<CustomDialog> {
                             BorderRadius.only(bottomLeft: Radius.circular(12)),
                         backgroundColor: AppTheme.appColor,
                         borderColor: AppTheme.appColor, onTap: () {
-                      push(context, YourRewardStatus(allRulesSelected: widget.allRulesSelected,));
+                      push(context, YourRewardStatus(allRulesSelected: true));
                     }),
                   ),
                   Expanded(
@@ -291,7 +193,7 @@ class _CustomDialogState extends State<CustomDialog> {
                         textColor: AppTheme.appColor,
                         backgroundColor: Colors.transparent,
                         borderColor: Colors.transparent, onTap: () {
-                      push(context, YourRewardStatus(allRulesSelected: widget.allRulesSelected,));
+                      push(context, YourRewardStatus(allRulesSelected: false));
                     }),
                   )
                 ],

@@ -58,7 +58,7 @@ class _DelRulesState extends State<DelRules> {
             Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: SizedBox(
-                  height: 400,
+                  height: 200,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: rulesText.length,
@@ -73,7 +73,7 @@ class _DelRulesState extends State<DelRules> {
                           borderRadius: BorderRadius.circular(12),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
+                              color: Colors.black.withValues(alpha: 0.2),
                               blurRadius: 5,
                               spreadRadius: 2,
                             ),

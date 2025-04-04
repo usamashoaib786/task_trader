@@ -12,7 +12,7 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
       child: Row(
         children: [
           Image.asset(
@@ -47,7 +47,7 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
             children: [
               InkWell(
                 onTap: () {
-                  //push(context, YourRewardStatus());
+                  push(context, YourRewardStatus(isHomeScreen: true,));
                 },
                 child: Image.asset(
                   "assets/images/bronzeBadge.png",
@@ -57,16 +57,16 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
               SizedBox(
                 width: 10,
               ),
-              InkWell(
-                onTap: () {
-                  push(context, NotificationsScreen());
-                },
-                child: Icon(
-                  Icons.notifications,
-                  color: AppTheme.whiteColor,
-                  size: 30,
-                ),
-              )
+              // InkWell(
+              //   onTap: () {
+              //     push(context, NotificationsScreen());
+              //   },
+              //   child: Icon(
+              //     Icons.notifications,
+              //     color: AppTheme.whiteColor,
+              //     size: 30,
+              //   ),
+              // )
             ],
           )
         ],

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:task_trader/Resources/utils.dart';
+import 'package:task_trader/Views/bottom_navigation_bar.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -7,6 +9,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final FontWeight? fontWeight;
   final double? fontsize;
   final Color? color;
+  final bool? rewardPage;
   const CustomAppBar(
       {super.key,
       this.title = "",
@@ -14,7 +17,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       this.leadingIcon,
       this.fontWeight,
       this.fontsize,
-      this.color});
+      this.color,
+      this.rewardPage});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,7 +27,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         centerTitle: true,
         leading: GestureDetector(
             onTap: () {
-              Navigator.pop(context);
+              if (rewardPage == true) {
+                pushUntil(context, BottomNavView());
+              } else {
+                Navigator.pop(context);
+              }
             },
             child: leadingIcon),
         title: Text(

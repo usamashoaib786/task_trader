@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:task_trader/Resources/app_theme.dart';
 
 class CustomAppFormField extends StatefulWidget {
-  final bool enabled;
+  final bool? enabled;
   final double? height;
   final double? width;
   final double? fontsize;
@@ -56,7 +56,7 @@ class CustomAppFormField extends StatefulWidget {
     this.hintStyle,
     this.errorText,
     this.cursorColor,
-    this.enabled = true,
+    this.enabled,
   });
 
   @override
@@ -78,7 +78,7 @@ class _CustomAppFormFieldState extends State<CustomAppFormField> {
         controller: widget.controller,
         cursorColor: AppTheme.appColor,
         keyboardType: TextInputType.name,
-        enabled: widget.enabled,
+        enabled: widget.enabled?? true,
         decoration: InputDecoration(
             prefixIcon: widget.prefixIcon,
             prefixIconConstraints: const BoxConstraints(

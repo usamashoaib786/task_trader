@@ -20,6 +20,8 @@ class PrefKey {
   static const String nottifyCount = "notifyCount";
   static const String userType = "userType";
   static const String email = "email";
+  static const String userPoints = "points";
+  static const String userLevel = "level";
   static const String password = "password";
   static const String phone = "phone";
 }
