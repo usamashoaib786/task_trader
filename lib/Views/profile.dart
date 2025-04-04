@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_trader/Resources/app_bar.dart';
@@ -11,7 +10,6 @@ import 'package:task_trader/Resources/pref_keys.dart';
 import 'package:task_trader/Resources/screen_sizes.dart';
 import 'package:task_trader/Resources/utils.dart';
 import 'package:task_trader/Services/auth_service.dart';
-import 'package:task_trader/Services/profile_service.dart';
 import 'package:task_trader/Views/Auth%20Screens/login.dart';
 
 class Profile extends StatefulWidget {

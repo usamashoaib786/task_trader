@@ -14,10 +14,7 @@ class TierProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Calculate progress as a fraction
     double progress = userPoints / totalLevels;
-
-   print("mujy btao user Level : $userLevel");
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

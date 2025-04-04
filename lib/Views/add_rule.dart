@@ -8,7 +8,6 @@ import 'package:task_trader/Resources/app_text.dart';
 import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/screen_sizes.dart';
 import 'package:task_trader/Services/rule_service.dart';
-import 'package:task_trader/Views/del_rule.dart';
 
 class AddNewRule extends StatefulWidget {
   const AddNewRule({super.key});

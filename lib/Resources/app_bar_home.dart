@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:task_trader/Resources/app_text.dart';
 import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/utils.dart';
-import 'package:task_trader/Views/notification.dart';
 import 'package:task_trader/Views/reward_screen.dart';
 
 class AppBarHome extends StatelessWidget implements PreferredSizeWidget {

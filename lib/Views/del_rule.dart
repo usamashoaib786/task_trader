@@ -83,7 +83,7 @@ class _DelRulesState extends State<DelRules> {
                           children: [
                             Align(
                               alignment: Alignment.centerLeft,
-                              child: Container(
+                              child: SizedBox(
                                 width: ScreenSize(context).width * 0.54,
                                 child: Text(
                                   rulesText[index],

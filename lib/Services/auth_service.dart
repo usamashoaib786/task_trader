@@ -87,7 +87,6 @@ class AuthService {
       Map<String, dynamic>? userProfile =
           await ProfileService().fetchUserProfile();
       if (userProfile != null) {
-        print("User Profile...!  $userProfile");
         String userName = userProfile["name"];
         String userEmail = userProfile["email"];
         String userPhone = userProfile["number"] ?? "";
