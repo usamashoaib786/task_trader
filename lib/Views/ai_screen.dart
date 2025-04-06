@@ -36,7 +36,7 @@ class _AiPoweredState extends State<AiPowered>
       backgroundColor: Colors.black,
       appBar: CustomAppBar(
         leadingIcon: Images.backIconBlack,
-        title: "AI Powered",
+        title: "Trading Quotes",
         fontsize: 20,
         fontWeight: FontWeight.w600,
         color: AppTheme.white,
@@ -46,7 +46,7 @@ class _AiPoweredState extends State<AiPowered>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            AppText.appText("AI Coach:",
+            AppText.appText("Coach JB:",
                 textColor: AppTheme.white,
                 fontSize: 24,
                 fontWeight: FontWeight.w700),
@@ -97,48 +97,3 @@ class _AiPoweredState extends State<AiPowered>
     );
   }
 }
-
-            // Inspire Me Again Button
-            // ElevatedButton(
-            //   onPressed: () {
-            //     setState(() {
-            //       randomQuote = QuoteProvider.getRandomQuote();
-            //     });
-            //   },
-            //   style: ElevatedButton.styleFrom(
-            //     backgroundColor: AppTheme.appColor,
-            //     shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(12)),
-            //     padding:
-            //         const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-            //     textStyle:
-            //         const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            //   ),
-            //   child: const Text("Inspire Me Again"),
-            // ),
-   // SizedBox(
-              //   width: 350,
-              //   child: Column(
-              //     children: [
-              //       AppButton.appButton("Play Audio",
-              //           width: ScreenSize(context).width,
-              //           height: 62,
-              //           radius: 28.0,
-              //           fontSize: 20,
-              //           fontWeight: FontWeight.w400),
-              //       SizedBox(
-              //         height: 20,
-              //       ),
-              //       AppButton.appButton("Continue",
-              //           width: ScreenSize(context).width,
-              //           height: 62,
-              //           radius: 28.0,
-              //           fontSize: 20,
-              //           fontWeight: FontWeight.w400),
-              //       SizedBox(
-              //         height: 20,
-              //       ),
-              //     ],
-              //   ),
-              // )
-           

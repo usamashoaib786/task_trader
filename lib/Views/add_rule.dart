@@ -7,7 +7,9 @@ import 'package:task_trader/Resources/app_field.dart';
 import 'package:task_trader/Resources/app_text.dart';
 import 'package:task_trader/Resources/app_theme.dart';
 import 'package:task_trader/Resources/screen_sizes.dart';
+import 'package:task_trader/Resources/utils.dart';
 import 'package:task_trader/Services/rule_service.dart';
+import 'package:task_trader/Views/del_rule.dart';
 
 class AddNewRule extends StatefulWidget {
   const AddNewRule({super.key});
@@ -28,6 +30,18 @@ class _AddNewRuleState extends State<AddNewRule> {
         fontsize: 25,
         fontWeight: FontWeight.w800,
         color: AppTheme.white,
+        actions: [
+              InkWell(
+                onTap: () {
+                  push(context, DelRules());
+                },
+                child: Icon(
+                  Icons.rule_sharp,
+                  color: AppTheme.whiteColor,
+                  size: 30,
+                ),
+              )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),

@@ -264,7 +264,7 @@ class _YourRewardStatusState extends State<YourRewardStatus> {
 
         // Update in Firebase
         docRef.update({
-          'profile.points': updatedPoints,
+          'profile.points': updatedPoints.toString(),
           'profile.level': newLevel,
         }).then((_) {
           AuthService().showToast("User level updated to $newLevel");
@@ -274,7 +274,7 @@ class _YourRewardStatusState extends State<YourRewardStatus> {
       } else {
         // Only update points if level remains same
         docRef.update({
-          'profile.points': updatedPoints,
+          'profile.points': updatedPoints.toString(),
         });
       }
     });
@@ -321,7 +321,7 @@ class _YourRewardStatusState extends State<YourRewardStatus> {
 
         // Update in Firebase
         docRef.update({
-          'profile.points': updatedPoints,
+          'profile.points': updatedPoints.toString(),
           'profile.level': newLevel,
         }).then((_) {
           AuthService().showToast("User level updated to $newLevel");
@@ -331,7 +331,7 @@ class _YourRewardStatusState extends State<YourRewardStatus> {
       } else {
         // Only update points if level remains same
         docRef.update({
-          'profile.points': updatedPoints,
+          'profile.points': updatedPoints.toString(),
         });
       }
     });

@@ -41,6 +41,30 @@ String uid = FirebaseAuth.instance.currentUser!.uid;
     showToast("Error removing item: $e");
   }
 }
+   Future<void> updateRuleAtIndex(int index, String newRule) async {
+  String uid = FirebaseAuth.instance.currentUser!.uid;
+  try {
+    DocumentSnapshot userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+    List<dynamic> currentRules = userDoc['Rules'] ?? [];
+
+    if (index < currentRules.length) {
+      currentRules[index] = newRule;
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .update({'Rules': currentRules});
+
+      showToast("Rule updated successfully!");
+    } else {
+      showToast("Invalid index!");
+    }
+  } catch (e) {
+    showToast("Error updating rule: $e");
+  }
+}
 
  void showToast(String message) {
     if (kDebugMode) {

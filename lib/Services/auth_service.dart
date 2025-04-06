@@ -39,7 +39,7 @@ class AuthService {
           'name': name,
           'email': email,
           'level': "Bronze",
-          'points': 0,
+          'points': "0",
           'created_at': FieldValue.serverTimestamp(),
         },
         'Rules': [] // Initialize rules as an empty array

@@ -120,7 +120,7 @@ class _LoginState extends State<Login> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              AppText.appText("Dont’s have an account? "),
+                              AppText.appText("Don't have an account? "),
                               GestureDetector(
                                   onTap: () {
                                     push(context, Signup());

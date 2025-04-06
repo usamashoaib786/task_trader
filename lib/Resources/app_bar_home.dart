@@ -5,7 +5,7 @@ import 'package:task_trader/Resources/utils.dart';
 import 'package:task_trader/Views/reward_screen.dart';
 
 class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
-  final String userDisplayName ;
+  final String userDisplayName;
   const AppBarHome({super.key, required this.userDisplayName});
 
   @override
@@ -14,9 +14,10 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
       padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
       child: Row(
         children: [
-          Image.asset(
-            "assets/images/memoji-Boys.png",
-            height: 50,
+          CircleAvatar(
+            backgroundImage:
+                NetworkImage(getRandomHumanAvatar(name: userDisplayName)),
+            radius: 24,
           ),
           SizedBox(
             width: 20,
@@ -46,7 +47,11 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
             children: [
               InkWell(
                 onTap: () {
-                  push(context, YourRewardStatus(isHomeScreen: true,));
+                  push(
+                      context,
+                      YourRewardStatus(
+                        isHomeScreen: true,
+                      ));
                 },
                 child: Image.asset(
                   "assets/images/bronzeBadge.png",
@@ -56,21 +61,15 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
               SizedBox(
                 width: 10,
               ),
-              // InkWell(
-              //   onTap: () {
-              //     push(context, NotificationsScreen());
-              //   },
-              //   child: Icon(
-              //     Icons.notifications,
-              //     color: AppTheme.whiteColor,
-              //     size: 30,
-              //   ),
-              // )
             ],
           )
         ],
       ),
     );
+  }
+  String getRandomHumanAvatar({name}) {
+    final firstName = name.split(' ').first;
+    return 'https://api.dicebear.com/7.x/adventurer/png?seed=$firstName';
   }
 
   @override
