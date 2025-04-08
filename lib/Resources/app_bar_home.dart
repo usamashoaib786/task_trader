@@ -14,11 +14,11 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget {
       padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
       child: Row(
         children: [
-          CircleAvatar(
-            backgroundImage:
-                NetworkImage(getRandomHumanAvatar(name: userDisplayName)),
-            radius: 24,
-          ),
+        //   CircleAvatar(
+        //     backgroundImage:
+        //         NetworkImage(getRandomHumanAvatar(name: userDisplayName)),
+        //     radius: 24,
+        //   ),
           SizedBox(
             width: 20,
           ),
